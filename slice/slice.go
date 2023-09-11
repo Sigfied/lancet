@@ -1008,7 +1008,7 @@ func SortBy[T any](slice []T, less func(a, b T) bool) {
 // default sortType is ascending (asc), if descending order, set sortType to desc
 // This function is deprecated, use Sort and SortBy for replacement.
 // Play: https://go.dev/play/p/fU1prOBP9p1
-func SortByField(slice any, field string, sortType ...string) error {
+func SortByField[T any](slice []T, field string, sortType ...string) error {
 	sv := sliceValue(slice)
 	t := sv.Type().Elem()
 
@@ -1192,10 +1192,40 @@ func KeyBy[T any, U comparable](slice []T, iteratee func(item T) U) map[U]T {
 
 // Join the slice item with specify separator.
 // Play: https://go.dev/play/p/huKzqwNDD7V
-func Join[T any](s []T, separator string) string {
-	str := Map(s, func(_ int, item T) string {
+func Join[T any](slice []T, separator string) string {
+	str := Map(slice, func(_ int, item T) string {
 		return fmt.Sprint(item)
 	})
 
 	return strings.Join(str, separator)
+}
+
+// Partition all slice elements with the evaluation of the given predicate functions.
+// todo
+func Partition[T any](slice []T, predicates ...func(item T) bool) [][]T {
+	l := len(predicates)
+
+	result := make([][]T, l+1)
+
+	for _, item := range slice {
+		processed := false
+
+		for i, f := range predicates {
+			if f == nil {
+				panic("predicate function must not be nill")
+			}
+
+			if f(item) {
+				result[i] = append(result[i], item)
+				processed = true
+				break
+			}
+		}
+
+		if !processed {
+			result[l] = append(result[l], item)
+		}
+	}
+
+	return result
 }

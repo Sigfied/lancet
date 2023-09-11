@@ -521,3 +521,129 @@ func ExampleIsNumber() {
 	// true
 	// true
 }
+
+func ExampleIsBin() {
+	result1 := IsBin("0101")
+	result2 := IsBin("0b1101")
+	result3 := IsBin("b1101")
+	result4 := IsBin("1201")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+	fmt.Println(result3)
+	fmt.Println(result4)
+
+	// Output:
+	// true
+	// true
+	// false
+	// false
+}
+
+func ExampleIsHex() {
+	result1 := IsHex("0xabcde")
+	result2 := IsHex("0XABCDE")
+	result3 := IsHex("cdfeg")
+	result4 := IsHex("0xcdfeg")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+	fmt.Println(result3)
+	fmt.Println(result4)
+
+	// Output:
+	// true
+	// true
+	// false
+	// false
+}
+
+func ExampleIsBase64URL() {
+	result1 := IsBase64URL("SAGsbG8sIHdvcmxkIQ")
+	result2 := IsBase64URL("SAGsbG8sIHdvcmxkIQ==")
+	result3 := IsBase64URL("SAGsbG8sIHdvcmxkIQ=")
+	result4 := IsBase64URL("SAGsbG8sIHdvcmxkIQ===")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+	fmt.Println(result3)
+	fmt.Println(result4)
+
+	// Output:
+	// true
+	// true
+	// false
+	// false
+}
+
+func ExampleIsJWT() {
+	result1 := IsJWT("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibWVzc2FnZSI6IlB1dGluIGlzIGFic29sdXRlIHNoaXQiLCJpYXQiOjE1MTYyMzkwMjJ9.wkLWA5GtCpWdxNOrRse8yHZgORDgf8TpJp73WUQb910")
+	result2 := IsJWT("abc")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIsVisa() {
+	result1 := IsVisa("4111111111111111")
+	result2 := IsVisa("123")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIsMasterCard() {
+	result1 := IsMasterCard("5425233430109903")
+	result2 := IsMasterCard("4111111111111111")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIsAmericanExpress() {
+	result1 := IsAmericanExpress("342883359122187")
+	result2 := IsAmericanExpress("3782822463100007")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIsUnionPay() {
+	result1 := IsUnionPay("6221263430109903")
+	result2 := IsUnionPay("3782822463100007")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+
+	// Output:
+	// true
+	// false
+}
+
+func ExampleIsChinaUnionPay() {
+	result1 := IsChinaUnionPay("6250941006528599")
+	result2 := IsChinaUnionPay("3782822463100007")
+
+	fmt.Println(result1)
+	fmt.Println(result2)
+
+	// Output:
+	// true
+	// false
+}

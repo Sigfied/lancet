@@ -231,7 +231,12 @@ func TestIsIpV4(t *testing.T) {
 	assert := internal.NewAssert(t, "TestIsIpV4")
 
 	assert.Equal(true, IsIpV4("127.0.0.1"))
+
 	assert.Equal(false, IsIpV4("::0:0:0:0:0:0:1"))
+	assert.Equal(false, IsIpV4("127.0.0.1.1"))
+	assert.Equal(false, IsIpV4("256.0.0.1"))
+	assert.Equal(false, IsIpV4("127.0.0.a"))
+	assert.Equal(false, IsIpV4(""))
 }
 
 func TestIsIpV6(t *testing.T) {
@@ -239,8 +244,14 @@ func TestIsIpV6(t *testing.T) {
 
 	assert := internal.NewAssert(t, "TestIsIpV6")
 
-	assert.Equal(false, IsIpV6("127.0.0.1"))
 	assert.Equal(true, IsIpV6("::0:0:0:0:0:0:1"))
+	assert.Equal(true, IsIpV6("::1"))
+	assert.Equal(true, IsIpV6("::"))
+
+	assert.Equal(false, IsIpV6("127.0.0.1"))
+	assert.Equal(false, IsIpV6("2001:db8::8a2e:37023:7334"))
+	assert.Equal(false, IsIpV6("2001::25de::cade"))
+	assert.Equal(false, IsIpV6(""))
 }
 
 func TestIsUrl(t *testing.T) {
@@ -535,4 +546,91 @@ func TestIsPrintable(t *testing.T) {
 	assert.Equal(true, IsPrintable(""))
 	assert.Equal(true, IsPrintable("😄"))
 	assert.Equal(false, IsPrintable("\u0000"))
+}
+
+func TestIsBin(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsBin")
+
+	assert.Equal(true, IsBin("0101"))
+	assert.Equal(true, IsBin("0b1101"))
+
+	assert.Equal(false, IsBin("b1101"))
+	assert.Equal(false, IsBin("1201"))
+	assert.Equal(false, IsBin(""))
+}
+
+func TestIsHex(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsHex")
+
+	assert.Equal(true, IsHex("ABCDE"))
+	assert.Equal(true, IsHex("abcde"))
+	assert.Equal(true, IsHex("0xabcde"))
+	assert.Equal(true, IsHex("0Xabcde"))
+	assert.Equal(true, IsHex("#abcde"))
+
+	assert.Equal(false, IsHex("cdfeg"))
+	assert.Equal(false, IsHex("0xcdfeg"))
+	assert.Equal(false, IsHex(""))
+}
+
+func TestIsBase64URL(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsBase64URL")
+
+	assert.Equal(true, IsBase64URL("SAGsbG8sIHdvcmxkIQ"))
+	assert.Equal(true, IsBase64URL("SAGsbG8sIHdvcmxkIQ=="))
+
+	assert.Equal(false, IsBase64URL("SAGsbG8sIHdvcmxkIQ="))
+	assert.Equal(false, IsBase64URL("SAGsbG8sIHdvcmxkIQ==="))
+	// assert.Equal(false, IsBase64URL(""))
+}
+
+func TestIsJWT(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsJWT")
+
+	assert.Equal(true, IsJWT("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibWVzc2FnZSI6IlB1dGluIGlzIGFic29sdXRlIHNoaXQiLCJpYXQiOjE1MTYyMzkwMjJ9.wkLWA5GtCpWdxNOrRse8yHZgORDgf8TpJp73WUQb910"))
+	assert.Equal(false, IsJWT("abc"))
+}
+
+func TestIsVisa(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsVisa")
+
+	assert.Equal(true, IsVisa("4111111111111111"))
+	assert.Equal(false, IsVisa("123"))
+}
+
+func TestIsMasterCard(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsMasterCard")
+
+	assert.Equal(true, IsMasterCard("5425233430109903"))
+	assert.Equal(false, IsMasterCard("4111111111111111"))
+}
+
+func TestIsAmericanExpress(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsAmericanExpress")
+
+	assert.Equal(true, IsAmericanExpress("342883359122187"))
+	assert.Equal(false, IsAmericanExpress("3782822463100007"))
+}
+
+func TestIsUnionPay(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsUnionPay")
+
+	assert.Equal(true, IsUnionPay("6221263430109903"))
+	assert.Equal(false, IsUnionPay("3782822463100007"))
+}
+
+func TestIsChinaUnionPay(t *testing.T) {
+	t.Parallel()
+	assert := internal.NewAssert(t, "TestIsChinaUnionPay")
+
+	assert.Equal(true, IsChinaUnionPay("6250941006528599"))
+	assert.Equal(false, IsChinaUnionPay("3782822463100007"))
 }
